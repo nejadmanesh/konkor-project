@@ -1,0 +1,44 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+
+export default function LivePreview() {
+  const router = useRouter()
+
+  useEffect(() => {
+    const handleMessage = async (message: MessageEvent<any>) => {
+      const { origin, data } = message
+
+      // Check if message is from Strapi
+      const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337'
+      if (origin !== strapiUrl) {
+        return
+      }
+
+      if (data.type === 'strapiUpdate') {
+        // Refresh the page when content is updated in Strapi
+        router.refresh()
+      } else if (data.type === 'strapiScript') {
+        // Inject the preview script from Strapi
+        const script = window.document.createElement('script')
+        script.textContent = data.payload.script
+        window.document.head.appendChild(script)
+      }
+    }
+
+    // Add the event listener
+    window.addEventListener('message', handleMessage)
+
+    // Let Strapi know we're ready to receive the script
+    window.parent?.postMessage({ type: 'previewReady' }, '*')
+
+    // Remove the event listener on unmount
+    return () => {
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [router])
+
+  return null
+}
+

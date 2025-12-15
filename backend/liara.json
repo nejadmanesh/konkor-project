@@ -1,0 +1,12 @@
+{
+  "app": "konkor",
+  "platform": "django",
+  "port": 80,
+  "django": {
+    "pythonVersion": "3.13"
+  },
+  "build": {
+    "location": "iran"
+  },
+  "disks": []
+}

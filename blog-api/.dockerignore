@@ -1,0 +1,10 @@
+.tmp/
+build/
+dist/
+node_modules/
+.git
+.env
+.env.local
+.env.production
+.cache
+public/uploads
