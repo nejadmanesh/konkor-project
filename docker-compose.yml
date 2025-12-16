@@ -4,17 +4,17 @@ services:
   db:
     image: postgres:16-alpine
     env_file:
-      - .env.production
+      - .env
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-konkour_db}
+      POSTGRES_USER: ${POSTGRES_USER:-konkour_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-konkour_password}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -24,7 +24,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     env_file:
-      - .env.production
+      - .env
     depends_on:
       db:
         condition: service_healthy
@@ -40,10 +40,10 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost}
-        NEXT_PUBLIC_STRAPI_API_URL: ${NEXT_PUBLIC_STRAPI_API_URL:-http://localhost:1337}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://89.42.199.69}
+        NEXT_PUBLIC_STRAPI_API_URL: ${NEXT_PUBLIC_STRAPI_API_URL:-}
     env_file:
-      - .env.production
+      - .env
     environment:
       - NODE_ENV=production
     depends_on:

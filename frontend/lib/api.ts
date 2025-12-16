@@ -1,7 +1,6 @@
-// Strapi API URL - blog-api runs on port 1337
 const STRAPI_API_URL = (typeof window === 'undefined' && process.env.STRAPI_API_URL)
   ? process.env.STRAPI_API_URL
-  : (process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337')
+  : (process.env.NEXT_PUBLIC_STRAPI_API_URL || '')
 
 // Django API URL for other endpoints
 const DJANGO_API_URL = (typeof window === 'undefined' && process.env.INTERNAL_API_URL)
@@ -436,16 +435,13 @@ export async function getPosts(params?: {
     sp.set('filters[tags][slug][$eq]', params.tag)
   }
 
+  if (!STRAPI_API_URL) {
+    return { count: 0, next: null, previous: null, results: [] }
+  }
   const data = await fetchStrapiAPI<any>(`/api/posts?${sp.toString()}`)
   const items = Array.isArray(data?.data) ? data.data.map(mapStrapiPost) : []
   const total = data?.meta?.pagination?.total || items.length
-
-  return {
-    count: total,
-    next: data?.meta?.pagination?.page < data?.meta?.pagination?.pageCount ? 'next' : null,
-    previous: data?.meta?.pagination?.page > 1 ? 'previous' : null,
-    results: items,
-  }
+  return { count: total, next: data?.meta?.pagination?.page < data?.meta?.pagination?.pageCount ? 'next' : null, previous: data?.meta?.pagination?.page > 1 ? 'previous' : null, results: items }
 }
 
 export async function getPost(slug: string, isDraftMode: boolean = false): Promise<Post> {
@@ -463,6 +459,9 @@ export async function getPost(slug: string, isDraftMode: boolean = false): Promi
     sp.set('status', 'draft')
   }
 
+  if (!STRAPI_API_URL) {
+    throw new Error('یافت نشد')
+  }
   const data = await fetchStrapiAPI<any>(`/api/posts?${sp.toString()}`, { isDraftMode })
   const item = Array.isArray(data?.data) && data.data.length > 0 ? data.data[0] : null
   if (!item) throw new Error('یافت نشد')
@@ -476,6 +475,9 @@ export async function getPopularPosts(): Promise<Post[]> {
   sp.set('populate', '*')
   sp.set('filters[publishedAt][$notNull]', 'true')
 
+  if (!STRAPI_API_URL) {
+    return []
+  }
   const data = await fetchStrapiAPI<any>(`/api/posts?${sp.toString()}`)
   return Array.isArray(data?.data) ? data.data.map(mapStrapiPost) : []
 }
@@ -487,11 +489,17 @@ export async function getRecentPosts(): Promise<Post[]> {
   sp.set('populate', '*')
   sp.set('filters[publishedAt][$notNull]', 'true')
 
+  if (!STRAPI_API_URL) {
+    return []
+  }
   const data = await fetchStrapiAPI<any>(`/api/posts?${sp.toString()}`)
   return Array.isArray(data?.data) ? data.data.map(mapStrapiPost) : []
 }
 
 export async function getCategories(): Promise<Category[]> {
+  if (!STRAPI_API_URL) {
+    return []
+  }
   const data = await fetchStrapiAPI<any>('/api/categories?populate=*')
   return Array.isArray(data?.data) ? data.data.map(mapStrapiCategory) : []
 }
@@ -500,6 +508,9 @@ export async function getCategory(slug: string): Promise<Category> {
   const sp = new URLSearchParams()
   sp.set('filters[slug][$eq]', slug)
   sp.set('populate', '*')
+  if (!STRAPI_API_URL) {
+    throw new Error('یافت نشد')
+  }
   const data = await fetchStrapiAPI<any>(`/api/categories?${sp.toString()}`)
   const item = Array.isArray(data?.data) && data.data.length > 0 ? data.data[0] : null
   if (!item) throw new Error('یافت نشد')
@@ -515,19 +526,19 @@ export async function getCategoryPosts(slug: string, page?: number): Promise<Pag
   sp.set('filters[publishedAt][$notNull]', 'true')
   sp.set('sort', 'publishedAt:desc')
 
+  if (!STRAPI_API_URL) {
+    return { count: 0, next: null, previous: null, results: [] }
+  }
   const data = await fetchStrapiAPI<any>(`/api/posts?${sp.toString()}`)
   const items = Array.isArray(data?.data) ? data.data.map(mapStrapiPost) : []
   const total = data?.meta?.pagination?.total || items.length
-
-  return {
-    count: total,
-    next: data?.meta?.pagination?.page < data?.meta?.pagination?.pageCount ? 'next' : null,
-    previous: data?.meta?.pagination?.page > 1 ? 'previous' : null,
-    results: items,
-  }
+  return { count: total, next: data?.meta?.pagination?.page < data?.meta?.pagination?.pageCount ? 'next' : null, previous: data?.meta?.pagination?.page > 1 ? 'previous' : null, results: items }
 }
 
 export async function getTags(): Promise<Tag[]> {
+  if (!STRAPI_API_URL) {
+    return []
+  }
   const data = await fetchStrapiAPI<any>('/api/tags?populate=*')
   return Array.isArray(data?.data) ? data.data.map(mapStrapiTag) : []
 }
@@ -541,19 +552,19 @@ export async function getTagPosts(slug: string, page?: number): Promise<Paginate
   sp.set('filters[publishedAt][$notNull]', 'true')
   sp.set('sort', 'publishedAt:desc')
 
+  if (!STRAPI_API_URL) {
+    return { count: 0, next: null, previous: null, results: [] }
+  }
   const data = await fetchStrapiAPI<any>(`/api/posts?${sp.toString()}`)
   const items = Array.isArray(data?.data) ? data.data.map(mapStrapiPost) : []
   const total = data?.meta?.pagination?.total || items.length
-
-  return {
-    count: total,
-    next: data?.meta?.pagination?.page < data?.meta?.pagination?.pageCount ? 'next' : null,
-    previous: data?.meta?.pagination?.page > 1 ? 'previous' : null,
-    results: items,
-  }
+  return { count: total, next: data?.meta?.pagination?.page < data?.meta?.pagination?.pageCount ? 'next' : null, previous: data?.meta?.pagination?.page > 1 ? 'previous' : null, results: items }
 }
 
 export async function getAuthors(): Promise<Author[]> {
+  if (!STRAPI_API_URL) {
+    return []
+  }
   const data = await fetchStrapiAPI<any>('/api/authors?populate=*')
   return Array.isArray(data?.data) ? data.data.map(mapStrapiAuthor) : []
 }
@@ -573,18 +584,14 @@ function mapStrapiMenuItem(item: any): MenuItem {
 }
 
 export async function getBlogNavigation(): Promise<BlogNavigation> {
+  if (!STRAPI_API_URL) {
+    return { mainMenuItems: [], filterMenuItems: [] }
+  }
   const data = await fetchStrapiAPI<any>('/api/blog-navigation?populate=*')
-
-  // In Strapi v5, single types return data directly, not in data.data
   const nav = data?.data || data || {}
-
   return {
-    mainMenuItems: Array.isArray(nav.mainMenuItems)
-      ? nav.mainMenuItems.map(mapStrapiMenuItem).filter((item: MenuItem) => item.isActive)
-      : [],
-    filterMenuItems: Array.isArray(nav.filterMenuItems)
-      ? nav.filterMenuItems.map(mapStrapiMenuItem).filter((item: MenuItem) => item.isActive)
-      : [],
+    mainMenuItems: Array.isArray(nav.mainMenuItems) ? nav.mainMenuItems.map(mapStrapiMenuItem).filter((item: MenuItem) => item.isActive) : [],
+    filterMenuItems: Array.isArray(nav.filterMenuItems) ? nav.filterMenuItems.map(mapStrapiMenuItem).filter((item: MenuItem) => item.isActive) : [],
   }
 }
 

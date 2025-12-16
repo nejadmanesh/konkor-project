@@ -1,0 +1,149 @@
+# ============================================
+# Python & Django
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+downloads/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+.polyglot/
+site_media/
+htmlcov/
+staticfiles/
+static/
+media/
+coverage/
+*.log
+*.pot
+db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.env/
+*.venv/
+
+# ============================================
+# FastAPI Worker / RAG / ML Stuff
+# ============================================
+**/rag/__pycache__/
+**/rag/.cache/
+**/rag/.datasets/
+**/rag/.chroma/
+**/rag/.qdrant/
+**/rag/models/
+**/rag/checkpoints/
+**/rag/results/
+**/rag/temp/
+
+# ============================================
+# Node.js & Frontend (Next.js)
+# ============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-debug.log*
+cache/
+temp/
+
+# Next.js
+.next/
+out/
+.vercel/
+.next-env.d.ts
+
+# Tailwind / PostCSS cache
+.postcss-cache/
+tailwind.config.js
+
+# ============================================
+# Deployment / Docker
+# ============================================
+docker-compose.override.yml
+docker-compose*.log
+**/Dockerfile.backup
+**/Dockerfile.old
+**/docker-cache/
+**/docker-build/
+.docker/
+logs/
+
+# ============================================
+# Strapi CMS
+# ============================================
+blog-api/.cache/
+blog-api/build/
+blog-api/logs/
+blog-api/dist/
+blog-api/node_modules/
+blog-api/.temp/
+blog-api/.strapi/
+blog-api/.strapi-updater.json
+blog-api/.tmp/
+blog-api/.eslintcache
+blog-api/.env*
+exports/
+uploads/*
+!uploads/.gitkeep
+
+# ============================================
+# Environment Variables (هرگز commit نشوند!!)
+# ============================================
+.env
+.env.*
+!.env.example
+
+# ============================================
+# Editors & OS Files
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.*.sublime-workspace
+.*.sublime-project
+
+# ============================================
+# Testing & Coverage
+# ============================================
+.tox/
+.coverage
+.nyc_output/
+pytest_cache/
+.DS_Store
+coverage/
+htmlcov/
+reports/
+
+# ============================================
+# Temporary Files
+# ============================================
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+.~*
