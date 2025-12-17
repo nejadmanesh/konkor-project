@@ -6,9 +6,9 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-konkour_db}
-      POSTGRES_USER: ${POSTGRES_USER:-konkour_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-konkour_password}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -40,8 +40,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://89.42.199.69}
-        NEXT_PUBLIC_STRAPI_API_URL: ${NEXT_PUBLIC_STRAPI_API_URL:-}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_STRAPI_API_URL: ${NEXT_PUBLIC_STRAPI_API_URL}
     env_file:
       - .env
     environment:
